@@ -14,5 +14,11 @@ ShipRender.render = function(ship){
   rotate(ship.heading + PI /  2);
   fill(ship.color);
   triangle(-ship.radius, ship.radius, ship.radius, ship.radius, 0, -ship.radius);
+
+  if(ship.isBoosting){
+    fill("yellow");
+    ellipse(0, ship.radius+5, 5);
+  }
+
   pop();
 }
