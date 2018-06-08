@@ -1,10 +1,10 @@
-if (typeof require !== 'undefined') {
-  var Bullet = require('./bullet.js');
-}
+var Bullet = require('./bullet.js');
+
 function Ship(color, pos){
   this.id = Math.random();
   this.radius = 15;
 	this.pos = pos;
+  this.drawPoints = [];
   this.heading = 0;
   this.rotation = 0;
   this.velocity = {x: 0, y:0};
@@ -18,6 +18,29 @@ function Ship(color, pos){
   this.updatePosition = function(){
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
+
+    console.log(Math.cos(this.heading*Math.PI));
+
+
+    var mCos120 = Math.cos(120*180/Math.PI);
+    var mSin120 = Math.sin(120*180/Math.PI);
+    var mCos240 = Math.cos(240*180/Math.PI);
+    var mSin240 = Math.sin(240*180/Math.PI);
+
+    var r = 15; // this is distance from the center to one of triangle's point.
+
+    var mA, mB, mC;
+
+    mA.x = this.pos.x + r;
+    mA.y = this.pos.y;
+    mB.x = mA.x * mCos120 - mA.y  * mSin120;
+    mB.y = mA.x * mSin120 + mA.y * mCos120;
+    mC.x = mA.x * mCos240 - mA.y * mSin240;
+    mC.y = mA.x * mSin240 + mA.y * mCos240;
+
+
+    this.drawPoints = [mC, mB, mA];
+    console.log(this.drawPoints);
   }
 
   this.fire = function(){
@@ -121,6 +144,7 @@ Ship.createFromShip = function(ship){
       heading: ship.heading,
       isBoosting: ship.isBoosting,
       color: ship.color,
+      drawPoints: ship.drawPoints,
       bullets: bullets
     }
     return data;

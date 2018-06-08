@@ -5,6 +5,8 @@ var Player = require('./player.js');
 var Asteroid = require('./asteroid.js');
 var SpawnHandler = require('./SpawnHandler.js');
 
+
+var polygonsIntersect = require('polygons-intersect');
 var express = require('express');
 var app = express();
 

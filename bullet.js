@@ -1,3 +1,5 @@
+var pointCollision = require('point-in-polygon');
+
 function Bullet(shipId, x, y, heading){
   this.id = Math.random();
   this.shipId = shipId;
@@ -33,13 +35,13 @@ function Bullet(shipId, x, y, heading){
 
   this.hitsPlayer = function(player){
     if(this.shipId != player.ship.id){
-      return this.hitsEntity(player.ship);
+      return pointCollision([this.pos.x, this.pos.y], player.ship.drawPoints);
     }
     return false;
   }
 
   this.hitsAsteroid = function(asteroid){
-    return this.hitsEntity(asteroid);
+    return pointCollision([this.pos.x, this.pos.y], asteroid.drawPoints)
   }
 
   this.hitsEntity = function(entity){
