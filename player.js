@@ -7,6 +7,7 @@ function Player(id, color, name){
 
   this.kills = 0;
   this.deaths = 0;
+  this.asteroidsDestroyed = 0;
 
   this.dead = false;
   this.color = color;
@@ -21,6 +22,10 @@ function Player(id, color, name){
     this.ship = undefined;
     this.dead = true;
   }
+
+  this.calculatePoints = function(){
+    return (this.kills*10)+(this.asteroidsDestroyed*1)-(this.deaths*3);
+  }
 }
 
 Player.createFromPlayer = function(player){
@@ -29,6 +34,8 @@ Player.createFromPlayer = function(player){
     name: player.name,
     kills: player.kills,
     deaths: player.deaths,
+    asteroidsDestroyed: player.asteroidsDestroyed,
+    points: player.calculatePoints(),
     dead: player.dead,
     color: player.color,
     ship : Ship.createFromShip(player.ship)

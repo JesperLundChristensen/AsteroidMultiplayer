@@ -4,6 +4,7 @@ function Ship(color, pos){
   this.id = Math.random();
   this.radius = 15;
 	this.pos = pos;
+  this.frontPoint;
   this.drawPoints = [];
   this.heading = 0;
   this.rotation = 0;
@@ -19,28 +20,23 @@ function Ship(color, pos){
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
 
-    console.log(Math.cos(this.heading*Math.PI));
+    this.updateDrawPoints();
+  }
 
+  this.updateDrawPoints = function(){
+    var front = {x:0, y:0};
+    var left = {x:0, y:0};
+    var right = {x:0, y:0};
 
-    var mCos120 = Math.cos(120*180/Math.PI);
-    var mSin120 = Math.sin(120*180/Math.PI);
-    var mCos240 = Math.cos(240*180/Math.PI);
-    var mSin240 = Math.sin(240*180/Math.PI);
+    front.x = this.pos.x + this.radius*Math.cos(this.heading);
+    front.y = this.pos.y + this.radius*Math.sin(this.heading);
+    left.x = this.pos.x + this.radius*Math.cos(this.heading + (120*Math.PI/180))
+    left.y = this.pos.y + this.radius*Math.sin(this.heading + (120*Math.PI/180))
+    right.x = this.pos.x + this.radius*Math.cos(this.heading - (120*Math.PI/180))
+    right.y = this.pos.y + this.radius*Math.sin(this.heading - (120*Math.PI/180))
 
-    var r = 15; // this is distance from the center to one of triangle's point.
-
-    var mA, mB, mC;
-
-    mA.x = this.pos.x + r;
-    mA.y = this.pos.y;
-    mB.x = mA.x * mCos120 - mA.y  * mSin120;
-    mB.y = mA.x * mSin120 + mA.y * mCos120;
-    mC.x = mA.x * mCos240 - mA.y * mSin240;
-    mC.y = mA.x * mSin240 + mA.y * mCos240;
-
-
-    this.drawPoints = [mC, mB, mA];
-    console.log(this.drawPoints);
+    this.drawPoints = [front, left, right];
+    this.frontPoint = front;
   }
 
   this.fire = function(){
@@ -48,7 +44,7 @@ function Ship(color, pos){
       return;
     }
     this.lastfire = new Date();
-    var bullet = new Bullet(this.id, this.pos.x, this.pos.y, this.heading);
+    var bullet = new Bullet(this.id, this.frontPoint.x, this.frontPoint.y, this.heading);
     this.bullets.push(bullet);
   }
 
@@ -60,8 +56,8 @@ function Ship(color, pos){
     if(this.isBoosting){
       var angle = this.heading;//(this.heading * Math.PI / 2);
 
-      this.velocity.x += 0.001*Math.cos(angle);
-      this.velocity.y += 0.001*Math.sin(angle);
+      this.velocity.x += 0.0015*Math.cos(angle);
+      this.velocity.y += 0.0015*Math.sin(angle);
     }
   }
   this.update = function(){

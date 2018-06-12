@@ -5,7 +5,7 @@ var Player = require('./player.js');
 var Asteroid = require('./asteroid.js');
 var SpawnHandler = require('./SpawnHandler.js');
 
-
+var fs = require('fs');
 var polygonsIntersect = require('polygons-intersect');
 var express = require('express');
 var app = express();
@@ -23,12 +23,13 @@ console.log("Server started.");
 
 var colors = ['blue', 'white', 'yellow', 'red', 'green', 'brown', 'magenta', 'orangered', 'pink', 'limegreen'];
 
-var numOfPlayers = 0;
-
 var world;
 var spawnHandler = new SpawnHandler();
 
 var gameRunning = false;
+var startTime;
+var roundNumber = 0;
+var roundTime = 20000;
 
 var players = {};
 var livePlayers = {};
@@ -47,11 +48,11 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('rotateClockwise', function(){
-		rotateShip(players[socket.id], 0.01);
+		rotateShip(players[socket.id], 0.02);
 	});
 
 	socket.on('rotateCounterClockwise', function(){
-		rotateShip(players[socket.id], -0.01);
+		rotateShip(players[socket.id], -0.02);
 	});
 
 	socket.on('stopRotation', function(){
@@ -83,6 +84,10 @@ io.sockets.on('connection', function(socket){
 
 setInterval(function(){
 	if(gameRunning){
+		if(shouldEndRound())
+		{
+			endRound();
+		}
 		for (var i = 0; i < asteroids.length; i++) {
 			asteroids[i].update();
 			for(var key in players){
@@ -107,10 +112,11 @@ setInterval(function(){
 				}
 				for (var i = 0; i < asteroids.length; i++) {
 					if(player.ship.hitsAsteroid(asteroids[i])){
+						player.asteroidsDestroyed++;
 						if(asteroids[i].radius / 2 > 10)
 						{
-							asteroids.push(new Asteroid(asteroids[i].pos.x+10, asteroids[i].pos.y+10, asteroids[i].radius / 2));
-							asteroids.push(new Asteroid(asteroids[i].pos.x-10, asteroids[i].pos.y-10, asteroids[i].radius / 2));
+							asteroids.push(new Asteroid({x:asteroids[i].pos.x+10, y:asteroids[i].pos.y+10}, asteroids[i].radius / 2));
+							asteroids.push(new Asteroid({x:asteroids[i].pos.x-10, y:asteroids[i].pos.y-10}, asteroids[i].radius / 2));
 						}
 						asteroids.splice(i, 1);
 					}
@@ -139,9 +145,17 @@ function rotateShip(player, angle){
 }
 
 function createUpdatePackage(world){
+	var timer = 0;
+	if(gameRunning)
+	{
+		timer = (roundTime-(Date.now()-startTime))/1000;
+	}
+
 	return {
 		players: populatePlayers(world.players),
-		asteroids: populateAsteroids(world.asteroids)
+		asteroids: populateAsteroids(world.asteroids),
+		roundNumber: roundNumber,
+		timeRemaining: Math.floor(timer),
 	};
 }
 
@@ -166,8 +180,8 @@ function clearWorld(){
 }
 
 function createAsteroids(){
-	for(var i = 0; i < 5; i++){
-		asteroids.push(new Asteroid());
+	for(var i = 0; i < 15-Object.keys(players).length; i++){
+		asteroids.push(new Asteroid(spawnHandler.getSpawn()));
 	}
 }
 
@@ -177,8 +191,48 @@ function respawnShips(){
 	}
 }
 
+function shouldEndRound(){
+	if((Date.now() - startTime) >= roundTime)
+	{
+		return true;
+	}
+
+	var alive=0;
+	for(var key in players){
+		if(!players[key].dead){
+			alive++;
+			if(alive > 1){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+function endRound(){
+	gameRunning = false;
+
+	saveScore();
+}
+
+function saveScore(){
+	var scores = {};
+	for(var key in players){
+		var player = players[key];
+		scores[player.id] = {name: player.name, kills: player.kills, deaths: player.deaths, asteroidsDestroyed: player.asteroidsDestroyed, points: player.points};
+	}
+		fs.writeFile('scores.json', JSON.stringify(scores), 'utf8', function(err){
+		if(err){
+			throw err;
+		}
+	});
+}
+
 function startGame(){
 	gameRunning = false;
+	startTime = Date.now();
+
+	roundNumber++;
 
 	clearWorld();
 	createAsteroids();

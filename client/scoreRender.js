@@ -1,25 +1,49 @@
 function ScoreRender(){
 }
 ScoreRender.render = function(players){
-  var xOffset = 0;
+  var sortableArray = [];
+  for(var key in players){
+    sortableArray.push(players[key]);
+  }
+
+  var yOffset = 0;
   push();
   textSize(16);
   fill('white');
-  text('Name', 700, 20+xOffset);
-  text('K', 840, 20+xOffset);
-  text('D', 860, 20+xOffset);
-  text('Points', 880, 20+xOffset);
-  for(var key in players){
-    player = players[key];
+  text('Name', 780, 20+yOffset);
+  text('K', 920, 20+yOffset);
+  text('D', 940, 20+yOffset);
+  text('A', 960, 20+yOffset);
+  text('P', 980, 20+yOffset);
 
-    xOffset += 25;
+  sortableArray.sort(function(a,b){
+    if(a.points < b.points){
+      return 1;
+    }
+    if(a.points > b.points){
+      return -1;
+    }
+    return 0;
+  });
+
+  for(var i = 0; i < sortableArray.length; i++){
+    player = sortableArray[i];
+
+    yOffset += 25;
 
     fill(player.color);
-    text(player.name, 700, 20+xOffset);
-    text(player.kills, 840, 20+xOffset);
-    text(player.deaths, 860, 20+xOffset);
-    text(player.kills/player.deaths, 880, 20+xOffset);
-
+    if(player.dead){
+      textSize(28);
+      textStyle("bold");
+      text('✝', 760, 20+yOffset);
+    }
+    textStyle("normal");
+    textSize(16);
+    text(player.name.substring(0, 14) + "...", 780, 20+yOffset);
+    text(player.kills, 920, 20+yOffset);
+    text(player.deaths, 940, 20+yOffset);
+    text(player.asteroidsDestroyed, 960, 20+yOffset);
+    text(player.points, 980, 20+yOffset);
   }
   pop();
 }

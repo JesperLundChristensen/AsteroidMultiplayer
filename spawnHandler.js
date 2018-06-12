@@ -1,26 +1,28 @@
 function SpawnHandler()
 {
-  var spawns = [{x: 100, y:200},
-  							{x: 105, y:500},
-  							{x: 300, y:200},
-  							{x: 305, y:500},
-  							{x: 500, y:200},
-  							{x: 505, y:500},
-  							{x: 700, y:500},
-  							{x: 705, y:200},
-  							{x: 900, y:500},
-  							{x: 905, y:200}];
+  var spawns = [];
+  for(var i = 0; i<5; i++){
+    for(var j = 0; j<4; j++){
+      randomX = Math.floor(Math.random() * 40) + 1;
+      randomY = Math.floor(Math.random() * 40) + 1;
+      spawns.push({x: 100 + randomX + (i*200), y: 100 + randomY + (150*j)});
+    }
+  }
+  spawns.sort(function() {
+    return .5 - Math.random();
+  });
+
   var next = 0;
-  var maxSpawns = 10;
 
   this.getSpawn = function(){
     var spawn = spawns[next];
     next++;
-    if(next > 9)
     {
+      if(next == spawns.length)
       next = 0;
     }
-    return spawn;
+
+    return {x: spawn.x, y: spawn.y};
   }
 }
 

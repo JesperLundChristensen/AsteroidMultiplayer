@@ -10,7 +10,7 @@ function setup(){
   frameRate(60);
 
   socket.on('update', function(data){
-    world = new World(data.players, data.asteroids);
+    world = data; 
   });
 }
 
@@ -33,6 +33,7 @@ function renderWorld(world){
   }
 
   ScoreRender.render(world.players);
+  ClockRender.render(world.timeRemaining);
 }
 
 function startGame(){

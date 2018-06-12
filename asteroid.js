@@ -1,17 +1,19 @@
-function Asteroid(x, y, radius){
+var polygonsIntersect = require('polygons-intersect');
+
+function Asteroid(pos, radius){
   if(radius){
     this.radius = radius;
   }else{
-    this.radius = (Math.random()*50)+30;
+    this.radius = (Math.random()*50)+20;
   }
-  if(x && y){
-    this.pos = {x: x, y: y};
+  if(pos){
+    this.pos = pos;
   }else{
     this.pos = {x: Math.random()*250, y:Math.random()*250};
   }
 
-  this.velocity = {x: Math.random()*0.1, y:Math.random()*0.1};
-  //this.velocity = {x: 0, y: 0}
+  this.velocity = {x: Math.random()*0.2, y:Math.random()*0.2};
+
   this.total = 10;
   this.drawPoints = [];
   this.offsets = [];
@@ -41,11 +43,7 @@ function Asteroid(x, y, radius){
   }
 
   this.hitsPlayer = function(player){
-    var a = this.pos.x - player.ship.pos.x;
-    var b = this.pos.y - player.ship.pos.y;
-    var c = Math.sqrt(a*a + b*b);
-
-    return player.ship.radius+this.radius > c;
+    return polygonsIntersect(this.drawPoints, player.ship.drawPoints).length > 0;
   }
 
   this.edges = function(){
@@ -65,6 +63,7 @@ function Asteroid(x, y, radius){
 
 Asteroid.createFromAsteroids = function(asteroid){
   return {
+    pos: asteroid.pos,
     drawPoints: asteroid.drawPoints,
   };
 }
