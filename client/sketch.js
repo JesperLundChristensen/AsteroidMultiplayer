@@ -3,6 +3,7 @@ var WIDTH = 1000;
 var HEIGHT = 700;
 var socket = io();
 var world;
+var shipRender = new ShipRender();
 
 function setup(){
   createCanvas(WIDTH, HEIGHT);
@@ -10,7 +11,7 @@ function setup(){
   frameRate(60);
 
   socket.on('update', function(data){
-    world = data; 
+    world = data;
   });
 }
 
@@ -25,13 +26,7 @@ function renderWorld(world){
   for (var i = 0; i < world.asteroids.length; i++) {
     AsteroidRender.render(world.asteroids[i]);
   }
-
-  for(var key in world.players){
-    if(!world.players[key].dead){
-      ShipRender.render(world.players[key].ship);
-    }
-  }
-
+  shipRender.render(world.players);
   ScoreRender.render(world.players);
   ClockRender.render(world.timeRemaining);
 }
