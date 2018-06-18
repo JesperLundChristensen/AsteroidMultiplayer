@@ -4,6 +4,7 @@ var HEIGHT = 700;
 var socket = io();
 var world;
 var shipRender = new ShipRender();
+var asteroidRender = new AsteroidRender();
 
 function setup(){
   createCanvas(WIDTH, HEIGHT);
@@ -24,7 +25,7 @@ function draw(){
 function renderWorld(world){
   background(0);
   for (var i = 0; i < world.asteroids.length; i++) {
-    AsteroidRender.render(world.asteroids[i]);
+    asteroidRender.render(world.asteroids[i]);
   }
   shipRender.render(world.players);
   ScoreRender.render(world.players);
