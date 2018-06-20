@@ -1,32 +1,31 @@
-class Particle {
-  constructor(size, x, y, heading, r, g, b) {
-    this.x = x;
-    this.y = y;
-    this.vx = 1*Math.cos(heading);
-    this.vy = 1*Math.sin(heading);
-
-    this.size = size;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-
-    this.alpha = 255;
+function Particle(size, x, y, heading, definedColor, speed) {
+  if(!speed){
+    speed = 1;
   }
 
-  finished() {
-    return this.alpha < 0;
+  this.x = x;
+  this.y = y;
+  this.vx = speed*Math.cos(heading);
+  this.vy = speed*Math.sin(heading);
+
+  this.size = size;
+  this.color = definedColor;
+  color(100, 50, 150);
+  this.color.setAlpha(255);
+
+  this.finished = function() {
+    return alpha(this.color) < 0;
   }
 
-  update() {
+  this.update = function() {
     this.x += this.vx;
     this.y += this.vy;
-    this.alpha -= 5;
+    this.color.setAlpha(alpha(this.color)-5);
   }
 
-  show() {
+  this.show = function() {
     noStroke();
-    fill(color(this.r, this.g, this.b, this.alpha));
+    fill(this.color);
     ellipse(this.x, this.y, this.size);
   }
-
 }

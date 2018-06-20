@@ -9,7 +9,7 @@ function Player(id, color, name){
   this.deaths = 0;
   this.asteroidsDestroyed = 0;
 
-  this.dead = false;
+  this.dead = true;
   this.color = color;
 
   this.respawnShip = function(pos){

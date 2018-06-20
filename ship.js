@@ -40,12 +40,14 @@ function Ship(color, pos){
   }
 
   this.fire = function(){
-    if (new Date() - this.lastfire < 2000){
-      return;
+    if(!this.dead){
+      if (new Date() - this.lastfire < 2000){
+        return;
+      }
+      this.lastfire = new Date();
+      var bullet = new Bullet(this.id, this.frontPoint.x, this.frontPoint.y, this.heading);
+      this.bullets.push(bullet);
     }
-    this.lastfire = new Date();
-    var bullet = new Bullet(this.id, this.frontPoint.x, this.frontPoint.y, this.heading);
-    this.bullets.push(bullet);
   }
 
   this.setBoost = function(b){
@@ -54,7 +56,7 @@ function Ship(color, pos){
 
   this.boost = function(){
     if(this.isBoosting){
-      var angle = this.heading;//(this.heading * Math.PI / 2);
+      var angle = this.heading;
 
       this.velocity.x += 0.0015*Math.cos(angle);
       this.velocity.y += 0.0015*Math.sin(angle);

@@ -5,6 +5,7 @@ var socket = io();
 var world;
 var shipRender = new ShipRender();
 var asteroidRender = new AsteroidRender();
+var destroyedAsteroidsRender = new DestroyedAsteroidsRender();
 
 function setup(){
   createCanvas(WIDTH, HEIGHT);
@@ -24,12 +25,14 @@ function draw(){
 
 function renderWorld(world){
   background(0);
+
   for (var i = 0; i < world.asteroids.length; i++) {
     asteroidRender.render(world.asteroids[i]);
   }
   shipRender.render(world.players);
   ScoreRender.render(world.players);
   ClockRender.render(world.timeRemaining);
+  destroyedAsteroidsRender.render(world.destroyedAsteroids);
 }
 
 function startGame(){

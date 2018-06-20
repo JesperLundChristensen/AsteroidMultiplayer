@@ -10,7 +10,7 @@ function ShipRender(){
   }
 
   this.drawShip = function(ship){
-    if(ship){
+    if(ship && ship.drawPoints.length == 3){
       this.drawBullets(ship.bullets);
 
       push();
@@ -33,14 +33,11 @@ function ShipRender(){
 
   this.drawFrontOfShip = function(ship){
     fill(ship.color)
-    ellipse(ship.drawPoints[0].x, ship.drawPoints[0].y, 7);
+    ellipse(ship.drawPoints[0].x, ship.drawPoints[0].y, 3);
   }
 
   this.drawBoost = function (ship){
     if(ship.isBoosting){
-      fill("yellow");
-      ellipse((ship.drawPoints[1].x + ship.drawPoints[2].x)/2, (ship.drawPoints[1].y + ship.drawPoints[2].y)/2, 7);
-
       this.createNewParticles((ship.drawPoints[1].x + ship.drawPoints[2].x)/2, (ship.drawPoints[1].y + ship.drawPoints[2].y)/2, ship);
     }
     this.drawParticles();
@@ -57,8 +54,8 @@ function ShipRender(){
   }
 
   this.createNewParticles = function(x, y, ship){
-    for(var i = 0; i < 5; i++){
-      this.particles.push(new Particle(3, x, y, ship.heading-Math.PI+random(-1, 1), 255, 204, 0));
+    for(var i = 0; i < 1; i++){
+      this.particles.push(new Particle(3, x, y, ship.heading-Math.PI+random(-1, 1), color(255, 200 - random(-50, 150), 0)));
     }
   }
 

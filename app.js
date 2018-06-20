@@ -29,12 +29,11 @@ var spawnHandler = new SpawnHandler();
 var gameRunning = false;
 var startTime;
 var roundNumber = 0;
-var roundTime = 20000;
+var roundTime = 30000;
 
 var players = {};
-var livePlayers = {};
-var deadPlayers = {};
 var asteroids = [];
+var destroyedAsteroids = [];
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
@@ -113,6 +112,7 @@ setInterval(function(){
 				for (var i = 0; i < asteroids.length; i++) {
 					if(player.ship.hitsAsteroid(asteroids[i])){
 						player.asteroidsDestroyed++;
+						destroyedAsteroids.push(asteroids[i].pos);
 						if(asteroids[i].radius / 2 > 10)
 						{
 							asteroids.push(new Asteroid({x:asteroids[i].pos.x+10, y:asteroids[i].pos.y+10}, asteroids[i].radius / 2));
@@ -124,7 +124,7 @@ setInterval(function(){
 			}
 		}
 	}
-	world = {players, asteroids};
+	world = {players, asteroids, destroyedAsteroids};
 },1000/300);
 
 setInterval(function(){
@@ -154,6 +154,7 @@ function createUpdatePackage(world){
 	return {
 		players: populatePlayers(world.players),
 		asteroids: populateAsteroids(world.asteroids),
+		destroyedAsteroids: world.destroyedAsteroids,
 		roundNumber: roundNumber,
 		timeRemaining: Math.floor(timer),
 	};
@@ -177,6 +178,7 @@ function populatePlayers(players){
 
 function clearWorld(){
 	asteroids = [];
+	destroyedAsteroids = [];
 }
 
 function createAsteroids(){
