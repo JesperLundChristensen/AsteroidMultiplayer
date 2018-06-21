@@ -40,7 +40,7 @@ function Ship(color, pos){
   }
 
   this.fire = function(){
-    if(!this.dead){
+    if(!this.dead && this.frontPoint){
       if (new Date() - this.lastfire < 2000){
         return;
       }

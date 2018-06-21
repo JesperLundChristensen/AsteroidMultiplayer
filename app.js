@@ -34,6 +34,7 @@ var roundTime = 30000;
 var players = {};
 var asteroids = [];
 var destroyedAsteroids = [];
+var deadShips = [];
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
@@ -124,7 +125,7 @@ setInterval(function(){
 			}
 		}
 	}
-	world = {players, asteroids, destroyedAsteroids};
+	world = {players, asteroids, destroyedAsteroids, deadShips};
 },1000/300);
 
 setInterval(function(){
@@ -134,6 +135,7 @@ setInterval(function(){
 }, 1000/60);
 
 function killPlayer(player){
+	deadShips.push(player.ship.pos);
 	player.killShip();
 	player.deaths++;
 }
@@ -155,6 +157,7 @@ function createUpdatePackage(world){
 		players: populatePlayers(world.players),
 		asteroids: populateAsteroids(world.asteroids),
 		destroyedAsteroids: world.destroyedAsteroids,
+		deadShips: world.deadShips,
 		roundNumber: roundNumber,
 		timeRemaining: Math.floor(timer),
 	};
@@ -179,6 +182,7 @@ function populatePlayers(players){
 function clearWorld(){
 	asteroids = [];
 	destroyedAsteroids = [];
+	deadShips = [];
 }
 
 function createAsteroids(){
