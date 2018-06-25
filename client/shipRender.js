@@ -55,7 +55,7 @@ function ShipRender(){
 
   this.createNewParticles = function(x, y, ship){
     for(var i = 0; i < 1; i++){
-      this.particles.push(new Particle(3, x, y, ship.heading-Math.PI+random(-1, 1), color(255, 200 - random(-50, 150), 0)));
+      this.particles.push(new Particle(3, x, y, ship.heading-Math.PI+random(-0.75, 0.75), color(255, 200 - random(-50, 150), 0)));
     }
   }
 
