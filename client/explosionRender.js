@@ -1,18 +1,14 @@
 function ExplosionRender(definedColor){
   this.particles = [];
-  this.alreadyRenderedPositions = [];
 
   this.definedColor = definedColor;
 
   this.render = function(positions){
     push();
     for (var i = 0; i < positions.length; i++) {
-      if(this.alreadyRenderedPositions.map(function(pos){return pos.x + ":" + pos.y}).indexOf(positions[i].x + ":" + positions[i].y) == -1)
-      {
-        this.createNewParticles(positions[i]);
-        this.alreadyRenderedPositions.push(positions[i]);
-      }
+      this.createNewParticles(positions[i]);
     }
+
     this.drawParticles();
     pop();
   }

@@ -13,7 +13,6 @@ function Player(id, color, name){
   this.color = color;
 
   this.respawnShip = function(pos){
-    console.log(pos);
     this.ship = new Ship(this.color, pos);
     this.dead = false;
   }

@@ -1,12 +1,12 @@
-
 var Ship = require('./ship.js');
 var Bullet = require('./bullet.js');
 var Player = require('./player.js');
 var Asteroid = require('./asteroid.js');
 var SpawnHandler = require('./SpawnHandler.js');
 
-var fs = require('fs');
 var polygonsIntersect = require('polygons-intersect');
+
+var fs = require('fs');
 var express = require('express');
 var app = express();
 
@@ -33,8 +33,6 @@ var roundTime = 30000;
 
 var players = {};
 var asteroids = [];
-var destroyedAsteroids = [];
-var deadShips = [];
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
@@ -112,20 +110,13 @@ setInterval(function(){
 				}
 				for (var i = 0; i < asteroids.length; i++) {
 					if(player.ship.hitsAsteroid(asteroids[i])){
-						player.asteroidsDestroyed++;
-						destroyedAsteroids.push(asteroids[i].pos);
-						if(asteroids[i].radius / 2 > 10)
-						{
-							asteroids.push(new Asteroid({x:asteroids[i].pos.x+10, y:asteroids[i].pos.y+10}, asteroids[i].radius / 2));
-							asteroids.push(new Asteroid({x:asteroids[i].pos.x-10, y:asteroids[i].pos.y-10}, asteroids[i].radius / 2));
-						}
-						asteroids.splice(i, 1);
+						destroyAsteroid(asteroids[i], player, i);
 					}
 				}
 			}
 		}
 	}
-	world = {players, asteroids, destroyedAsteroids, deadShips};
+	world = {players, asteroids};
 },1000/300);
 
 setInterval(function(){
@@ -134,8 +125,21 @@ setInterval(function(){
 	}
 }, 1000/60);
 
+function destroyAsteroid(asteroid, player, i){
+	io.sockets.emit('asteroidsDestroyed', asteroid.pos);
+
+	player.asteroidsDestroyed++;
+	if(asteroid.radius / 2 > 10)
+	{
+		asteroids.push(new Asteroid({x:asteroid.pos.x+10, y:asteroid.pos.y+10}, asteroid.radius / 2));
+		asteroids.push(new Asteroid({x:asteroid.pos.x-10, y:asteroid.pos.y-10}, asteroid.radius / 2));
+	}
+	asteroids.splice(i, 1);
+}
+
 function killPlayer(player){
-	deadShips.push(player.ship.pos);
+	io.sockets.emit('shipDestroyed', player.ship.pos);
+
 	player.killShip();
 	player.deaths++;
 }
@@ -156,8 +160,6 @@ function createUpdatePackage(world){
 	return {
 		players: populatePlayers(world.players),
 		asteroids: populateAsteroids(world.asteroids),
-		destroyedAsteroids: world.destroyedAsteroids,
-		deadShips: world.deadShips,
 		roundNumber: roundNumber,
 		timeRemaining: Math.floor(timer),
 	};
@@ -181,8 +183,6 @@ function populatePlayers(players){
 
 function clearWorld(){
 	asteroids = [];
-	destroyedAsteroids = [];
-	deadShips = [];
 }
 
 function createAsteroids(){

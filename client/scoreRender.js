@@ -1,20 +1,23 @@
 function ScoreRender(){
 }
-ScoreRender.render = function(players){
+ScoreRender.render = function(players, roundNumber){
+  ScoreRender.clearTable();
+
+  ScoreRender.drawroundNumber(roundNumber);
+
+  var sortableArray = ScoreRender.sortPlayerData(players);
+
+  for(var i = 0; i < sortableArray.length; i++){
+    ScoreRender.createPlayerDataRow(sortableArray[i], select("#scores"));
+  }
+}
+
+ScoreRender.sortPlayerData = function(players)
+{
   var sortableArray = [];
   for(var key in players){
     sortableArray.push(players[key]);
   }
-
-  var yOffset = 0;
-  push();
-  textSize(16);
-  fill('white');
-  text('Name', 780, 20+yOffset);
-  text('K', 920, 20+yOffset);
-  text('D', 940, 20+yOffset);
-  text('A', 960, 20+yOffset);
-  text('P', 980, 20+yOffset);
 
   sortableArray.sort(function(a,b){
     if(a.points < b.points){
@@ -26,24 +29,39 @@ ScoreRender.render = function(players){
     return 0;
   });
 
-  for(var i = 0; i < sortableArray.length; i++){
-    player = sortableArray[i];
+  return sortableArray;
+}
 
-    yOffset += 25;
+ScoreRender.createPlayerDataRow = function(player, table){
+  var tr = createElement('tr', '');
+  tr.parent(table);
 
-    fill(player.color);
-    if(player.dead){
-      textSize(28);
-      textStyle("bold");
-      text('✝', 760, 20+yOffset);
-    }
-    textStyle("normal");
-    textSize(16);
-    text(player.name.substring(0, 14) + "...", 780, 20+yOffset);
-    text(player.kills, 920, 20+yOffset);
-    text(player.deaths, 940, 20+yOffset);
-    text(player.asteroidsDestroyed, 960, 20+yOffset);
-    text(player.points, 980, 20+yOffset);
+  var playerColor = createElement('td', '').parent(tr);
+  playerColor.addClass('square');
+  playerColor.style('background', player.color);
+
+  var name = player.name;
+  if(player.dead){
+    name = "✝ " + player.name;
   }
-  pop();
+
+  var nameTd = createElement('td', name).parent(tr);
+  nameTd.style('font-color', player.color);
+
+  createElement('td', player.kills).parent(tr);
+  createElement('td', player.deaths).parent(tr);
+  createElement('td', player.asteroidsDestroyed).parent(tr);
+  createElement('td', player.points).parent(tr);
+}
+
+ScoreRender.drawroundNumber = function(roundNumber){
+  var h1 = select("#roundNumber");
+  h1.html("Round: " + roundNumber);
+}
+
+ScoreRender.clearTable = function(){
+  var tableElement = document.getElementById('scores');
+  while(tableElement.rows.length > 1) {
+    tableElement.deleteRow(1);
+  }
 }

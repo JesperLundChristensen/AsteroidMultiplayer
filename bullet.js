@@ -8,8 +8,8 @@ function Bullet(shipId, x, y, heading){
   this.velocity = {x: 0, y:0};
 
   this.updatePosition = function(){
-    this.velocity.x = 1*Math.cos(this.heading);
-    this.velocity.y = 1*Math.sin(this.heading);
+    this.velocity.x = 1.5*Math.cos(this.heading);
+    this.velocity.y = 1.5*Math.sin(this.heading);
 
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
