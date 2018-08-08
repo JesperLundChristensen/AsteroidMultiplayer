@@ -71,7 +71,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('fire', function(){
-		if(players[socket.id].ship != null  && timer < 30){
+		if(players[socket.id].ship != null  && timer <= 30){
 			players[socket.id].ship.fire();
 		}
 	});
