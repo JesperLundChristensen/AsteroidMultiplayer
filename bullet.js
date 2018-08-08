@@ -57,7 +57,9 @@ function Bullet(shipId, x, y, heading){
 
 Bullet.createFromBullet = function(bullet){
   return {
-    pos: bullet.pos
+    pos: bullet.pos,
+    heading: bullet.heading,
+    velocity: bullet.velocity
   };
 }
 
