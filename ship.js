@@ -143,6 +143,7 @@ Ship.createFromShip = function(ship){
       isBoosting: ship.isBoosting,
       color: ship.color,
       drawPoints: ship.drawPoints,
+      velocity: ship.velocity,
       bullets: bullets
     }
     return data;
