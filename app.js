@@ -29,10 +29,11 @@ var spawnHandler = new SpawnHandler();
 var gameRunning = false;
 var startTime;
 var roundNumber = 0;
-var roundTime = 30000;
+var roundTime = 33000;
 
 var players = {};
 var asteroids = [];
+var timer = 0;
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
@@ -70,7 +71,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('fire', function(){
-		if(players[socket.id].ship != null){
+		if(players[socket.id].ship != null  && timer <= 30){
 			players[socket.id].ship.fire();
 		}
 	});
@@ -151,7 +152,6 @@ function rotateShip(player, angle){
 }
 
 function createUpdatePackage(world){
-	var timer = 0;
 	if(gameRunning)
 	{
 		timer = (roundTime-(Date.now()-startTime))/1000;
