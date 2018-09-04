@@ -6,7 +6,7 @@ function Ship(color, pos){
 	this.pos = pos;
   this.frontPoint;
   this.drawPoints = [];
-  this.heading = 0;
+  this.heading = Math.floor(Math.random() * (Math.PI * 2));
   this.rotation = 0;
   this.velocity = {x: 0, y:0};
   this.isBoosting = false;
@@ -143,6 +143,7 @@ Ship.createFromShip = function(ship){
       isBoosting: ship.isBoosting,
       color: ship.color,
       drawPoints: ship.drawPoints,
+      velocity: ship.velocity,
       bullets: bullets
     }
     return data;
