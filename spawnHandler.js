@@ -24,6 +24,17 @@ function SpawnHandler()
 
     return {x: spawn.x, y: spawn.y};
   }
+
+  this.shuffleSpawnLocations = function() {
+    var j, x, i;
+    for (i = spawns.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = spawns[i];
+        spawns[i] = spawns[j];
+        spawns[j] = x;
+    }
+    return spawns;
+}
 }
 
 if (typeof exports !== 'undefined') {

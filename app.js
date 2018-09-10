@@ -234,6 +234,8 @@ function saveScore(){
 	});
 }
 
+var randomSpawnFactor = 0;
+
 function startGame(){
 	gameRunning = false;
 	startTime = Date.now();
@@ -241,6 +243,7 @@ function startGame(){
 	roundNumber++;
 
 	clearWorld();
+	spawnHandler.shuffleSpawnLocations(); //randomfunc
 	createAsteroids();
 	respawnShips();
 
