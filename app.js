@@ -234,8 +234,6 @@ function saveScore(){
 	});
 }
 
-var randomSpawnFactor = 0;
-
 function startGame(){
 	gameRunning = false;
 	startTime = Date.now();
