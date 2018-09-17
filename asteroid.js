@@ -65,6 +65,8 @@ Asteroid.createFromAsteroids = function(asteroid){
   return {
     pos: asteroid.pos,
     drawPoints: asteroid.drawPoints,
+    radius: asteroid.radius,
+    velocity: asteroid.velocity
   };
 }
 
