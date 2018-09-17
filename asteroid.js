@@ -12,7 +12,7 @@ function Asteroid(pos, radius){
     this.pos = {x: Math.random()*250, y:Math.random()*250};
   }
 
-  this.velocity = {x: Math.random()*0.2, y:Math.random()*0.2};
+  this.velocity = {x: (Math.random() - 0.5)*0.4, y:(Math.random() - 0.5)*0.4};
 
   this.total = 10;
   this.drawPoints = [];
@@ -58,12 +58,13 @@ function Asteroid(pos, radius){
         this.pos.y = 700 + this.radius;
     }
   }
-	return this;
+  return this;
 }
 
 Asteroid.createFromAsteroids = function(asteroid){
   return {
     pos: asteroid.pos,
+    radius: asteroid.radius,
     drawPoints: asteroid.drawPoints,
     radius: asteroid.radius,
     velocity: asteroid.velocity

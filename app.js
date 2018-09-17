@@ -241,6 +241,7 @@ function startGame(){
 	roundNumber++;
 
 	clearWorld();
+	spawnHandler.shuffleSpawnLocations(); //randomfunc
 	createAsteroids();
 	respawnShips();
 
