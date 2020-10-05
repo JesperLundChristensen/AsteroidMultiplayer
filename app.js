@@ -18,7 +18,7 @@ app.get('/',function(req, res) {
 app.use(express.static(__dirname + '/client'));
 app.use('/client',express.static(__dirname + '/client'));
 
-serv.listen(process.env.PORT || 80);
+serv.listen(process.env.PORT || 8080);
 console.log("Server started.");
 
 var colors = ['blue', 'white', 'yellow', 'red', 'green', 'brown', 'magenta', 'orangered', 'pink', 'limegreen'];
