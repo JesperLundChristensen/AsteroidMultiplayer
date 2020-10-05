@@ -1,4 +1,5 @@
-var pointCollision = require('point-in-polygon');
+var pointCollision = require('./pointinpolygon.js');
+
 
 function Bullet(shipId, x, y, heading){
   this.id = Math.random();
