@@ -12,6 +12,8 @@ var asteroidRender = new AsteroidRender();
 var asteroidExplosionRender = new ExplosionRender("grey");
 var shipExplosionRender = new ExplosionRender("yellow");
 
+var lastDataReceived=0;
+
 function setup(){
   var canvas = createCanvas(WIDTH, HEIGHT);
   canvas.position(300, 10);
@@ -19,7 +21,9 @@ function setup(){
   frameRate(60);
 
   socket.on('update', function(data){
-    world = data;
+    if(data.timestamp > lastDataReceived){
+      world = data;
+    }
   });
 
   socket.on('shipDestroyed', function(data){

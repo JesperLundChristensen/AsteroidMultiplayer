@@ -162,6 +162,7 @@ function createUpdatePackage(world){
 		asteroids: populateAsteroids(world.asteroids),
 		roundNumber: roundNumber,
 		timeRemaining: Math.floor(timer),
+		timestamp: Date.now()
 	};
 }
 
