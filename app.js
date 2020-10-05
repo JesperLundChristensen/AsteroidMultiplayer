@@ -59,19 +59,19 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('boost', function(){
-		if(players[socket.id].ship != null){
+		if(players[socket.id] != null && players[socket.id].ship != null){
 			players[socket.id].ship.setBoost(true);
 		}
 	});
 
 	socket.on('stopBoost', function(){
-		if(players[socket.id].ship != null){
+		if(players[socket.id] != null && players[socket.id].ship != null){
 			players[socket.id].ship.setBoost(false);
 		}
 	});
 
 	socket.on('fire', function(){
-		if(players[socket.id].ship != null  && timer <= 30){
+		if(players[socket.id] != null && players[socket.id].ship != null){
 			players[socket.id].ship.fire();
 		}
 	});
@@ -146,7 +146,7 @@ function killPlayer(player){
 }
 
 function rotateShip(player, angle){
-	if(player.ship != null){
+	if(player != null && player.ship != null){
 		player.ship.setRotation(angle);
 	}
 }

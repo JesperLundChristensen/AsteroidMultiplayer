@@ -31,6 +31,35 @@ function setup(){
   });
 }
 
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    socket.emit('boost');
+  } else if (keyCode === DOWN_ARROW) {
+    socket.emit('fire');
+  } else if (keyCode === LEFT_ARROW) {
+    socket.emit('rotateCounterClockwise');
+  } else if (keyCode === RIGHT_ARROW) {
+    socket.emit('rotateClockwise');
+  }
+}
+
+function keyReleased(){
+  if (keyCode === UP_ARROW) {
+    socket.emit('stopBoost');
+  } else if (keyCode === DOWN_ARROW) {
+
+  } else if (keyCode === LEFT_ARROW) {
+    socket.emit('stopRotation');
+  } else if (keyCode === RIGHT_ARROW) {
+    socket.emit('stopRotation');
+  }
+}
+
+function joinGame(){
+  let name = select('#playerName');
+  socket.emit("play", {name: name.elt.value});
+}
+
 function draw(){
   if(world){
     renderWorld(world);
