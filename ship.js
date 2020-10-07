@@ -58,8 +58,8 @@ function Ship(color, pos){
     if(this.isBoosting){
       var angle = this.heading;
 
-      this.velocity.x += 0.002*Math.cos(angle);
-      this.velocity.y += 0.002*Math.sin(angle);
+      this.velocity.x += 0.005*Math.cos(angle);
+      this.velocity.y += 0.005*Math.sin(angle);
     }
   }
   this.update = function(){

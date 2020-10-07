@@ -12,7 +12,7 @@ var asteroidRender = new AsteroidRender();
 var asteroidExplosionRender = new ExplosionRender("grey");
 var shipExplosionRender = new ExplosionRender("yellow");
 
-var lastDataReceived=0;
+var lastDataDrawn = 0;
 
 function setup(){
   var canvas = createCanvas(WIDTH, HEIGHT);
@@ -21,7 +21,7 @@ function setup(){
   frameRate(60);
 
   socket.on('update', function(data){
-    if(data.timestamp > lastDataReceived){
+    {
       world = data;
     }
   });
@@ -65,12 +65,18 @@ function joinGame(){
 }
 
 function draw(){
-  if(world){
+  if(world && world.timestamp > lastDataDrawn){
     renderWorld(world);
+    lastDataDrawn = world.timestamp;
+    console.log("drawn");
+  }
+  else {
+    console.log("skipped draw");
   }
 }
 
 function renderWorld(world){
+
   background(0);
 
   for (var i = 0; i < world.asteroids.length; i++) {

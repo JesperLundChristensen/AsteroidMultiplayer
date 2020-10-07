@@ -118,13 +118,13 @@ setInterval(function(){
 		}
 	}
 	world = {players, asteroids};
-},1000/300);
+},1000/100);
 
 setInterval(function(){
 	if(world){
 		io.sockets.emit('update', createUpdatePackage(world));
 	}
-}, 1000/60);
+}, 1000/30);
 
 function destroyAsteroid(asteroid, player, i){
 	io.sockets.emit('asteroidsDestroyed', asteroid.pos);
